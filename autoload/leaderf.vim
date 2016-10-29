@@ -110,3 +110,17 @@ function! leaderf#startMruExpl(...)
     call leaderf#LfPy("mruExplManager.startExplorer()")
 endfunction
 
+function! leaderf#statusLine(...) abort
+    if &ft ==? "leaderf"
+        let w:airline_section_a = 'LeaderF'
+        let w:airline_section_b = g:Lf_statusline_function
+        let w:airline_section_c = g:Lf_statusline_mode
+        let w:airline_section_x = g:Lf_statusline_curDir
+        let w:airline_section_y = g:Lf_statusline_total
+    endif
+endfunction
+
+if exists('g:loaded_airline')
+    "airline插件statusline集成
+    call airline#add_statusline_func('leaderf#statusLine')
+endif

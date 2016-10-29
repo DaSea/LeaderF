@@ -160,6 +160,7 @@ class Manager(object):
         vim.command("setlocal noswapfile")
         vim.command("setlocal nolist")
         vim.command("setlocal nonumber")
+        vim.command("setlocal norelativenumber")
         vim.command("setlocal nospell")
         vim.command("setlocal nowrap")
         vim.command("setlocal nofoldenable")
@@ -168,6 +169,9 @@ class Manager(object):
         vim.command("setlocal filetype=leaderf")
 
     def _setStatusline(self):
+        if vim.eval("exists('g:loaded_airline')") == '1':
+            return
+
         vim.command("setlocal statusline=LeaderF:\ [%#Lf_hl_stlFunction#"
                     "%{g:Lf_statusline_function}%#Lf_hl_none#,")
         vim.command("setlocal statusline+=\ %#Lf_hl_stlMode#%-9("
@@ -572,10 +576,11 @@ class Manager(object):
         if not self._content:
             vim.command("echohl Error | redraw | echo ' No content!'")
             return
-        self._gotoBuffer()
+
         vim.command("let g:Lf_statusline_curDir = '%s'" %
                     self._getExplorer().getStlCurDir())
         vim.command("let g:Lf_statusline_total = '%d'" % len(self._content))
+        self._gotoBuffer()
         self.input(False)
 
     def input(self, normal_mode=True):
